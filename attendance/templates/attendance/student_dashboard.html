@@ -18,6 +18,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 p-2">
         <div class="container-fluid">
+            <!-- Нажимаемая ссылка-заглушка строго по лекции -->
             <a class="navbar-brand" href="#">
                 <img src="{% static 'attendance/images/logo.png' %}" alt="Логотип СТИ" width="30" class="d-inline-block align-text-top me-2">
                 Электронный журнал
@@ -33,14 +34,39 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-4">
-                <div class="card shadow-sm p-4 text-center">
+                <div class="card shadow-sm p-4 text-center bg-white">
                     <h3 class="mb-3 text-primary">Панель Студента</h3>
-                    <p class="text-muted">Добро пожаловать в систему посещаемости!</p>
+
+                    <div class="mb-3 text-center">
+                        {% if request.user.student.avatar %}
+                            <img src="{{ request.user.student.avatar.url }}" alt="Аватарка" class="img-fluid rounded-circle shadow-sm border" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 100px; height: 100px;">Нет фото</div>
+                        {% endif %}
+                        <div class="mt-2">
+                            <a href="/attendance/avatar-update/" class="btn btn-link btn-sm text-decoration-none p-0">Изменить фото</a>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="card-title mb-1">
+                            {% if request.user.last_name or request.user.first_name %}
+                                {{ request.user.last_name }} {{ request.user.first_name }}
+                            {% else %}
+                                {{ request.user.username }}
+                            {% endif %}
+                        </h5>
+                        <p class="text-secondary small mb-0">
+                            Группа: {% if request.user.student.group_rel %}{{ request.user.student.group_rel.name }}{% else %}Не указана{% endif %}
+                        </p>
+                    </div>
+
+                    <p class="text-muted small">Добро пожаловать в систему посещаемости!</p>
 
                     <button class="btn btn-outline-danger w-100" type="button" id="toggleBtn">
                         Показать важную информацию
                     </button>
-                    
+
                     <div class="collapse mt-3" id="infoBox">
                         <div class="card card-body bg-light text-start small">
                             Не забывайте отмечаться на лекциях вовремя!

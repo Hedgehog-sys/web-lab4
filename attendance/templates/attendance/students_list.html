@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтрация студентов</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body class="bg-light p-4">
+    <div class="container" style="max-width: 800px;">
+        <h2 class="mb-4 text-primary">Поиск студентов по GET-фильтрам (Задание 3)</h2>
+
+        <form method="get" class="card p-4 shadow-sm mb-4 bg-white">
+            <div class="row g-3">
+                {{ form.as_p }}
+            </div>
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-success px-4">Применить фильтры</button>
+                <a href="/attendance/students-list/" class="btn btn-secondary px-4">Сбросить</a>
+            </div>
+        </form>
+
+        <h4 class="mb-3 text-secondary">Результаты поиска:</h4>
+        <ul class="list-group shadow-sm">
+            {% for student in students %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="fw-bold">{{ student.user.last_name }} {{ student.user.first_name }}</span>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">
+                        Группа: {% if student.group_rel %}{{ student.group_rel.name }}{% else %}Не указана{% endif %}
+                    </span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted text-center py-3">
+                    Студенты не найдены по заданным фильтрам.
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
